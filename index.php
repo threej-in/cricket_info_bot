@@ -18,9 +18,9 @@ define('DATA_TABLE',"CREATE TABLE DATA_TABLE(
   );");
 
 //include the required files
-require 'dbconfig.php';
-require 'simple_html_dom.php';
-require 'scrapper.php';
+require 'includes/dbconfig.php';
+require 'includes/simple_html_dom.php';
+require 'includes/scrapper.php';
 
 //function to handle curl requests
 function curl_handler($parameter, $response_needed){
