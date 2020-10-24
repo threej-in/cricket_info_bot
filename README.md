@@ -4,10 +4,10 @@ A telegram bot which fetches cricket data from cricbuzz website
 [Click here to launch the bot](https://telegram.me/cricket_info_bot)
 
 **Features of the bot**
-1. List live matches
-2. List upcoming matches from every tournaments.
-3. List recent matches from every tournaments.
-4. Can fetch mini-score, scorecard and points table from above results.
+1. Get live matches list.
+2. Get Time Table of upcoming matches from every tournament.
+3. Get the List of recent matches from every tournaments.
+4. Can fetch mini-score, scorecard and points table from above response.
 
 Version 0.1.0
 
