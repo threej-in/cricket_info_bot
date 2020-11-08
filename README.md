@@ -1,5 +1,5 @@
 # cricket_info_bot - Telegram Bot!
-**About :** A telegram bot which fetches Live cricket data from [cricbuzz](https://cricbuzz.com) website at an interval of 5 minutes after previous request.
+**About :** PHP script for fetching Live cricket data from [cricbuzz](https://cricbuzz.com) website at an interval of 5 minutes.
 Language used PHP and Mysqli
 
 **Launch :** [Click here to launch the bot](https://telegram.me/cricket_info_bot)
