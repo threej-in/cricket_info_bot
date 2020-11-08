@@ -11,7 +11,7 @@
  * @version 0.1.0
  */
 
-require_once 'msg_processor.php';
+require_once 'includes/msg_processor.php';
 
 //set webhook using query parameter
 if(isset($_GET)){
