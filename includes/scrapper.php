@@ -1,10 +1,17 @@
-
 <?php 
-//Start of live_matches function
 
-function live_matches($url){
+require_once 'simple_html_dom.php';
+
+/**
+ * Fetches live_match data.
+ * @param string $url Cricbuzz url
+ * @return string
+ */
+function get_live_matches($url){
+  global $COM;
   if(!is_string($url)){
-    return "url must be a string";
+    $COM->send_log("get_live_matches function error: url must be a string");
+    return false;
   }
     $i=0;
     $inline_keyboard = [];
@@ -13,12 +20,15 @@ function live_matches($url){
       if(isset($e->innertext)){
         $linktosend = "";
         foreach($e->find('a') as $link){
-          $linktosend .= $link->href;
+          $linktosend .= $link->href; 
+        }
+        if(strlen($linktosend)>64){
+          continue;
         }
         $inline_keyboard[$i][0] = 
           [
-              'text' =>$e->plaintext,
-              'callback_data' => $linktosend
+              'text' => $e->plaintext,
+              'callback_data' => substr($linktosend,21)
           ];
       }
       $i++;
@@ -29,7 +39,7 @@ function live_matches($url){
 }
 //End of live_matches function
 
-function im_content($url, $type){
+function get_intermediate_content($url, $type){
   $html = file_get_html($url);
   $i = 0;
   foreach($html->find('div.cb-lv-main h2') as $e){
@@ -44,11 +54,11 @@ function im_content($url, $type){
 }
 
 //Start of Upcoming_matches function
-function upcoming_matches($data){
+function get_upcoming_matches($data){
   $re = substr($data,0, strpos($data,'textis')-1);
   $qtxt = substr($data, strpos($data,'textis')+6);  
     $i=0; $z=-1;
-    $text="<b>\nLIST OF UPCOMING MATCHES IN ".$qtxt."</b>\n\n";
+    $text="<b>\nLIST OF UPCOMING MATCHES IN. ".$qtxt."</b>\n\n";
     $html = file_get_html("https://www.cricbuzz.com/cricket-match/live-scores/upcoming-matches");
     foreach($html->find('div.cb-lv-main') as $x){
       $z++;
@@ -63,7 +73,7 @@ function upcoming_matches($data){
         }
         foreach($e->find('span.schedule-date') as $g){
           $time = date("d M @ h:m a", floor(($g->timestamp)/1000));
-          $text .= "\nDate: ".$time;
+          $text .= "\nDate: ".$time." EST";
         }
         foreach($e->find('div.text-gray') as $f){
           if(isset($f->plaintext)){
@@ -81,7 +91,7 @@ function upcoming_matches($data){
 //End of upcoming matches function
 
 //Start of Recent matches function
-function recent_matches($data){
+function get_recent_matches($data){
   $re = substr($data,0, strpos($data,'textis')-1);
   $qtxt = substr($data, strpos($data,'textis')+6);  
   $i=0; $z=-1;
@@ -107,7 +117,7 @@ function recent_matches($data){
       }
       foreach($e->find('span.schedule-date') as $g){
         $time = date("d M Y @ h:m a", floor(($g->timestamp)/1000));
-        $text .= "<i>Match Date: ".$time."\n</i>";
+        $text .= "<i>Match Date: ".$time." EST\n</i>";
       }
       foreach($e->find('div.cb-scr-wll-chvrn') as $f){
         if(isset($f->plaintext)){
@@ -124,11 +134,11 @@ function recent_matches($data){
 //End of recent matches function
 
 //Start of mini score function
-function mini_score($url){
+function get_mini_score($url){
   $text = "<b>MiniScore</b>";
   $temp = "";
   $data = $url;
-  $url = "https://cricbuzz.com".$url;
+  $url = "https://cricbuzz.com/live-cricket-scores/".$url;
   $html = file_get_html($url);
   foreach($html->find('div.cb-col-scores') as $e){
     $temp =  $e->plaintext;
@@ -166,8 +176,10 @@ function mini_score($url){
 
 
 //Start of Scorecard function
-function scorecard($url){
+function get_scorecard($url){
+  global $COM;
   if(!is_string($url)){
+    $COM->send_log("get_scorecard function error: url must be a string");
     return false;
   }
   $url = "https://www.cricbuzz.com/live-cricket-scorecard".$url;
@@ -197,8 +209,10 @@ function scorecard($url){
 }
 //END of Scorecard function
 
-function points_table($url){
+function get_points_table($url){
+  global $COM;
   if(!is_string($url)){
+    $COM->send_log("get_points_table function error: url must be a string");
     return false;
   }
   $url = "https://cricbuzz.com".$url;
@@ -215,3 +229,4 @@ function points_table($url){
   $data .= "\n\n<i>source</i>: <a href=\"www.cricbuzz.com\">cricbuzz</a>";
   return $data;
 }
+?>
