@@ -12,7 +12,7 @@ Language used PHP and Mysqli
 4. Can fetch mini-score, scorecard and points table from above response.
 
 ### Which Library is used for data scrapping?
-We have used [Simple HTML DOM Parser](https://github.com/sunra/php-simple-html-dom-parser) for data scrapping.
+I have used [Simple HTML DOM Parser](https://github.com/sunra/php-simple-html-dom-parser) for data scrapping.
 
 Version 0.1.0
 
