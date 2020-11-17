@@ -218,8 +218,9 @@ function process_message($msg){
   //Process callback query
 function answer_callback_q($query){
   global $COM;
-  $chat_id =$query['from']['id'];
+  $chat_id =$query['message']['chat']['id'];
   $id = $query['id'];
+  $msg_id = $query['message']['message_id'];
   $data = $query['data'];
   $keyboard = $query['message']['reply_markup']['inline_keyboard'];
   for($i =0; $i<sizeof($keyboard); $i++){
@@ -269,7 +270,7 @@ function answer_callback_q($query){
     if(empty($inline_keyboard) || $inline_keyboard === null){
       $parameter = build_parameter('sendmessage',$chat_id,$text);
     }else{
-      $parameter = build_parameter('sendmessage',$chat_id,$text,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+      $parameter = build_parameter('editmessagetext',$chat_id,$text,$msg_id,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
     }
     $COM->curl_handler($parameter);
     //$parameter = ['method'=>'sendmessage','chat_id'=>$chat_id,'text'=>"<b>unable to process the request!</b>", 'parse_mode'=>'HTML', 'disable_web_page_preview'=> true];
@@ -278,7 +279,7 @@ function answer_callback_q($query){
 }
 //End of callback query function
 
-function build_parameter($method, $chat_id, $text, $ik = false){
+function build_parameter($method, $chat_id, $text, $msg_id=null, $ik = false){
   if(strcmp($method, 'sendmessage') === 0){
 
     if($ik === false){
@@ -296,6 +297,7 @@ function build_parameter($method, $chat_id, $text, $ik = false){
       return [
         'method'=>$method,
         'chat_id'=>$chat_id,
+        'message_id'=> $msg_id,
         'text'=>$text,
         'reply_markup' => $ik,
         'parse_mode' => 'HTML',
