@@ -98,8 +98,7 @@ function process_message($msg){
         ],
         'resize_keyboard'=>true
       ];
-      var_dump(build_parameter('sendmessage', $chat_id, $reply_text, $ik));
-      $COM->curl_handler(build_parameter('sendmessage', $chat_id, $reply_text, $ik));
+      $COM->curl_handler(build_parameter('sendmessage', $chat_id, $msg_id, $reply_text, $ik));
 
       //SEND USER DETAILS TO USER TABLE
       $user = [
@@ -118,11 +117,11 @@ function process_message($msg){
       
       if(empty($inline_keyboard) || !$inline_keyboard || strlen($inline_keyboard)<5){
       
-        $parameter = build_parameter('sendmessage',$chat_id,"<b>No Live matches found at this moment!</b>\n<i>Try after some time</i>");  
+        $parameter = build_parameter('sendmessage',$chat_id,$msg_id,"<b>No Live matches found at this moment!</b>\n<i>Try after some time</i>");  
       }else{
   
           $reply_text ="<b>CURRENT LIVE MATCHES ARE LISTED BELOW CHOOSE AN OPTION FOR MORE INFORMATION.</b>\n\n<i>Source</i>: <a href=\"https://cricbuzz.com\">Cricbuzz</a>";
-          $parameter = build_parameter('sendmessage', $chat_id, $reply_text, ['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+          $parameter = build_parameter('sendmessage', $chat_id,$msg_id, $reply_text, ['inline_keyboard'=>json_decode($inline_keyboard,true)]);
       }
       
       $COM->curl_handler($parameter);
@@ -134,12 +133,12 @@ function process_message($msg){
       if(empty($inline_keyboard)){
   
         $replytext = 'No tournaments found at this moment! \n<i>Try after some time...</i>';
-        $parameter = build_parameter('sendmessage',$chat_id,$replytext);
+        $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$replytext);
   
       }else{
         
         $replytext = "<b>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nChoose the Tournaments from available option below.\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</b>";
-        $parameter = build_parameter('sendmessage',$chat_id,$replytext,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+        $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$replytext,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
   
       }
       $COM->curl_handler($parameter);
@@ -150,11 +149,11 @@ function process_message($msg){
       if(empty($inline_keyboard)){
   
         $replytext = 'No tournaments found at this moment! \n<i>Try after some time...</i>';
-        $parameter = build_parameter('sendmessage',$chat_id,$replytext);
+        $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$replytext);
       }else{
         
         $replytext = "<b>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nChoose the Tournaments from available option below.\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</b>";
-        $parameter = build_parameter('sendmessage',$chat_id,$replytext,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+        $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$replytext,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
       }
       $COM->curl_handler($parameter);
   
@@ -171,19 +170,19 @@ function process_message($msg){
           ]
         ]
       ];
-      $parameter = build_parameter('sendmessage',$chat_id,$reply_text,$ik);
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$reply_text,$ik);
       $COM->curl_handler($parameter);
   
     }elseif(preg_match('/made with love/i', $text) === 1){
   
-      $parameter = build_parameter('sendsticker',$chat_id,'CAACAgIAAxkBAAICWF-MF90V55eA5Ng94A5HptOcvfhbAAKJAgACVp29CqFWzQIhMg49GwQ');
+      $parameter = build_parameter('sendsticker',$chat_id,$msg_id,'CAACAgIAAxkBAAICWF-MF90V55eA5Ng94A5HptOcvfhbAAKJAgACVp29CqFWzQIhMg49GwQ');
       $COM->curl_handler($parameter);
   
     }elseif(preg_match('/\/help|help/i',$text) === 1){
       
       $reply_text = "<b>List of commands for interaction:</b>\n\nCommand - Description\n1. /start - Restart the bot\n2. /live - Get the list of live matches.\n3./upcoming - Get the list of upcoming matches.\n4. /recent - Get the list of recent matches.\n5. /share - Get the link to share this bot.\n6. /menu - return to the main menu.\n\n<b>version: 0.1.0\nreleased on : 20-10-20</b>\n\nData source: cricbuzz.com\n\nDeveloped by : @mr_threej\nReport bugs and other issues to the developer.\n\nGithub repo: https://github.com/threej-in/cricket_info_bot\n\nFor more bots and updates join @threej_in channel.";
   
-      $parameter = build_parameter('sendmessage',$chat_id,$reply_text);
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$reply_text);
       $COM->curl_handler($parameter);
   
     }elseif(preg_match('/\/menu|menu/i',$text) === 1){
@@ -195,7 +194,7 @@ function process_message($msg){
         ],
         'resize_keyboard' => true
       ];
-      $COM->curl_handler(build_parameter('sendmessage',$chat_id,'Main menu!', $ik));
+      $COM->curl_handler(build_parameter('sendmessage',$chat_id,$msg_id,'Main menu!', $ik));
     }elseif(strpos($text, '/broadcast') === 0){
       if($chat_id == ADMINID){
         //broadcast(substr($text, 10));
@@ -235,19 +234,19 @@ function answer_callback_q($query){
 
   if(preg_match('/scorecard/i',$qtxt)){
     $result = get_3j('scorecard', $data);
-    $COM->curl_handler(build_parameter('sendmessage',$chat_id,$result));
+    $COM->curl_handler(build_parameter('sendmessage',$chat_id,$msg_id,$result));
 
   }else if(preg_match('/points table/i', $qtxt)){
     $result = get_3j('points table', $data);
-    $COM->curl_handler(build_parameter('sendmessage',$chat_id,$result));
+    $COM->curl_handler(build_parameter('sendmessage',$chat_id,$msg_id,$result));
 
   }else if(preg_match('/upcoming/i',$data)){
     $result = get_3j('upcomingmatches', substr($data, 8)." textis ".$qtxt);
 
     if(empty($result) || $result == null){
-      $parameter = build_parameter('sendmessage',$chat_id,"Internal error ocurred");
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,"Internal error ocurred");
     }else{
-      $parameter = build_parameter('sendmessage',$chat_id,$result);
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$result);
     }
     $COM->curl_handler($parameter);
 
@@ -257,9 +256,9 @@ function answer_callback_q($query){
     $inline_keyboard = substr($result, strpos($result,"inline_keyboardis")+18);
 
     if(empty($inline_keyboard) || $inline_keyboard === null){
-      $parameter = build_parameter('sendmessage',$chat_id,$text);
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$text);
     }else{
-      $parameter = build_parameter('sendmessage',$chat_id,$result,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$result,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
     }
     $COM->curl_handler($parameter);
   }else{ 
@@ -268,9 +267,9 @@ function answer_callback_q($query){
     $inline_keyboard = substr($result, strpos($result,"inline_keyboardis")+18);
 
     if(empty($inline_keyboard) || $inline_keyboard === null){
-      $parameter = build_parameter('sendmessage',$chat_id,$text);
+      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$text);
     }else{
-      $parameter = build_parameter('editmessagetext',$chat_id,$text,$msg_id,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+      $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,$text,$msg_id,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
     }
     $COM->curl_handler($parameter);
     //$parameter = ['method'=>'sendmessage','chat_id'=>$chat_id,'text'=>"<b>unable to process the request!</b>", 'parse_mode'=>'HTML', 'disable_web_page_preview'=> true];
@@ -279,7 +278,7 @@ function answer_callback_q($query){
 }
 //End of callback query function
 
-function build_parameter($method, $chat_id, $text, $msg_id=null, $ik = false){
+function build_parameter($method, $chat_id, $msg_id, $text, $msg_id=null, $ik = false){
   if(strcmp($method, 'sendmessage') === 0){
 
     if($ik === false){
@@ -287,6 +286,7 @@ function build_parameter($method, $chat_id, $text, $msg_id=null, $ik = false){
       return [
         'method'=>$method,
         'chat_id'=>$chat_id,
+        'reply_to_message_id'=>$msg_id,
         'text'=>$text,
         'parse_mode' => 'HTML',
         'disable_web_page_preview'=> true
@@ -297,6 +297,7 @@ function build_parameter($method, $chat_id, $text, $msg_id=null, $ik = false){
       return [
         'method'=>$method,
         'chat_id'=>$chat_id,
+        'reply_to_message_id'=>$msg_id,
         'message_id'=> $msg_id,
         'text'=>$text,
         'reply_markup' => $ik,
@@ -309,6 +310,7 @@ function build_parameter($method, $chat_id, $text, $msg_id=null, $ik = false){
     return [
       'method'=>$method,
       'chat_id' => $chat_id,
+      'reply_to_message_id'=>$msg_id,
       'sticker' => $text
     ];
   }
