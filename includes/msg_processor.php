@@ -180,7 +180,7 @@ function process_message($msg){
   
     }elseif(preg_match('/\/help|help/i',$text) === 1){
       
-      $reply_text = "<b>List of commands for interaction:</b>\n\nCommand - Description\n1. /start - Restart the bot\n2. /live - Get the list of live matches.\n3./upcoming - Get the list of upcoming matches.\n4. /recent - Get the list of recent matches.\n5. /share - Get the link to share this bot.\n6. /menu - return to the main menu.\n\n<b>version: 0.1.0\nreleased on : 20-10-20</b>\n\nData source: cricbuzz.com\n\nDeveloped by : @mr_threej\nReport bugs and other issues to the developer.\n\nGithub repo: https://github.com/threej-in/cricket_info_bot\n\nFor more bots and updates join @threej_in channel.";
+      $reply_text = "<b>List of commands for interaction:</b>\n\nCommand - Description\n1. /start - Restart the bot\n2. /live - Get the list of live matches.\n3./upcoming - Get the list of upcoming matches.\n4. /recent - Get the list of recent matches.\n5. /share - Get the link to share this bot.\n6. /menu - return to the main menu.\n\n<b>version: 0.1.0\nreleased on : 20-10-20</b>\n\nData source: cricbuzz.com\n\nDeveloped by : @pal_ji10dra24\nReport bugs and other issues to the developer.\n\nGithub repo: https://github.com/threej-in/cricket_info_bot\n\nFor more bots and updates join @threej_in channel.";
   
       $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$reply_text);
       $COM->curl_handler($parameter);
