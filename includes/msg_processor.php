@@ -83,7 +83,7 @@ function process_message($msg){
     }
     
     $COM->send_action($chat_id, 'typing');
-
+    if(!empty($text)){
     if(strpos($text, '/start') === 0 ){
   
       $COM->curl_handler(build_parameter('sendsticker',$chat_id,'CAACAgIAAxkBAAIDd1-EXuK2saBbv_6S6RTqjF11KV-zAALIAAMKu78k69LmAvFIA4gbBA'));
@@ -201,7 +201,7 @@ function process_message($msg){
       }
     }else{
       $COM->report_error($msg, $chat_id, 'Unknown command send /help to get the list of command!');  
-    }
+    }}
     if(!(strpos($text, '/start') === 0)){
       $user = [
         'id'=>$chat_id,
@@ -210,6 +210,19 @@ function process_message($msg){
       ];
       db_user($user);
     }
+  if($message['chat']['type'] == 'supergroup' || $message['chat']['type'] == 'group'){
+    if(isset($message['new_chat_participant']['id']) && $message['new_chat_participant']['id'] == 1322432611){//bot id
+      send_log($message);
+      $result3j = json_decode(curl_handler(['method'=>'getchatmember','chat_id'=>$chat_id, 'user_id'=>$message['from']['id']],1),true);
+      isset($result3j['result']['status']) && $mem_status = $result3j['result']['status'];
+      
+        if(preg_match('/creator|administrator/i',$mem_status) == 1){
+          curl_handler(['method'=>'sendmessage', 'chat_id'=>$message['from']['id'], 'text'=>"Hello admin I noticed that you have added me to your group @".$message['chat']['username']."\n Before getting started I will need the following permissions to work properly in the group.\n\n1.Send Messages\n2.Send Stickers & gifs"],0);
+        }else{
+          curl_handler(['method'=>'leavechat', 'chat_id'=>$chat_id],0);
+        }    
+    }    
+  }
     return true;
   }
   //End of Process message function
