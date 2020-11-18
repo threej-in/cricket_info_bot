@@ -234,19 +234,19 @@ function answer_callback_q($query){
 
   if(preg_match('/scorecard/i',$qtxt)){
     $result = get_3j('scorecard', $data);
-    $COM->curl_handler(build_parameter('sendmessage',$chat_id,$msg_id,$result));
+    $COM->curl_handler(build_parameter('editmessagetext',$chat_id,$msg_id,$result));
 
   }else if(preg_match('/points table/i', $qtxt)){
     $result = get_3j('points table', $data);
-    $COM->curl_handler(build_parameter('sendmessage',$chat_id,$msg_id,$result));
+    $COM->curl_handler(build_parameter('editmessagetext',$chat_id,$msg_id,$result));
 
   }else if(preg_match('/upcoming/i',$data)){
     $result = get_3j('upcomingmatches', substr($data, 8)." textis ".$qtxt);
 
     if(empty($result) || $result == null){
-      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,"Internal error ocurred");
+      $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,"Internal error ocurred");
     }else{
-      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$result);
+      $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,$result);
     }
     $COM->curl_handler($parameter);
 
@@ -256,9 +256,9 @@ function answer_callback_q($query){
     $inline_keyboard = substr($result, strpos($result,"inline_keyboardis")+18);
 
     if(empty($inline_keyboard) || $inline_keyboard === null){
-      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$text);
+      $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,$text);
     }else{
-      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$result,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
+      $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,$result,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
     }
     $COM->curl_handler($parameter);
   }else{ 
@@ -267,7 +267,7 @@ function answer_callback_q($query){
     $inline_keyboard = substr($result, strpos($result,"inline_keyboardis")+18);
 
     if(empty($inline_keyboard) || $inline_keyboard === null){
-      $parameter = build_parameter('sendmessage',$chat_id,$msg_id,$text);
+      $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,$text);
     }else{
       $parameter = build_parameter('editmessagetext',$chat_id,$msg_id,$text,$msg_id,['inline_keyboard'=>json_decode($inline_keyboard,true)]);
     }
@@ -279,7 +279,7 @@ function answer_callback_q($query){
 //End of callback query function
 
 function build_parameter($method, $chat_id, $msg_id, $text, $msg_id=null, $ik = false){
-  if(strcmp($method, 'sendmessage') === 0){
+  if(strcmp($method, 'sendmessage') === 0 || $method == 'editmessagetext'){
 
     if($ik === false){
 
