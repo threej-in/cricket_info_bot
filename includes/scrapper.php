@@ -22,13 +22,14 @@ function get_live_matches($url){
         foreach($e->find('a') as $link){
           $linktosend .= $link->href; 
         }
+        $linktosend = substr($linktosend,21);
         if(strlen($linktosend)>64){
           continue;
         }
         $inline_keyboard[$i][0] = 
           [
               'text' => $e->plaintext,
-              'callback_data' => substr($linktosend,21)
+              'callback_data' => $linktosend
           ];
       }
       $i++;
