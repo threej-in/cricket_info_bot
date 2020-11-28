@@ -200,7 +200,9 @@ function process_message($msg){
         //broadcast(substr($text, 10));
       }
     }else{
-      $COM->report_error($msg, $chat_id, 'Unknown command send /help to get the list of command!');  
+       if($message['chat']['type'] == 'supergroup' || $message['chat']['type'] == 'group'){
+          $COM->report_error($msg, $chat_id, 'Unknown command send /help to get the list of command!');  
+       }
     }}
     if(!(strpos($text, '/start') === 0)){
       $user = [
