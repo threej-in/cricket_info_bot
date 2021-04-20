@@ -1,5 +1,6 @@
 # cricket_info_bot - Telegram Bot!
-**About :** Bot for cricket lovers which provides recent match scores, upcoming match list from every format, 6 months cricket calendar, Players data all inside telegram.
+**About :** Bot for cricket lovers which provides cricket data all inside telegram.
+
 Language used PHP and Mysqli
 
 **Launch :** [Click here to launch the bot](https://telegram.me/cricket_info_bot)
