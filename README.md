@@ -1,21 +1,17 @@
 # cricket_info_bot - Telegram Bot!
-**About :** PHP script for fetching Live cricket data from [cricbuzz](https://cricbuzz.com) website at an interval of 5 minutes.
+**About :** Bot for cricket lovers which provides recent match scores, upcoming match list from every format, 6 months cricket calendar, Players data all inside telegram.
 Language used PHP and Mysqli
 
 **Launch :** [Click here to launch the bot](https://telegram.me/cricket_info_bot)
 
 ### What are the features of this bot?
 **Here is the list of Features of @Cricket_info_bot**
-1. Get live matches list.
+1. Get recent matches list & their scorecard.
 2. Get Time Table of upcoming matches from every tournament.
-3. Get the List of recent matches from every tournaments.
-4. Can fetch mini-score, scorecard and points table from above response.
+3. Get cricket calendar.
+4. All time IPL stats
+5. Cricket players all time stats
 
-### Which Library is used for data scrapping?
-I have used [Simple HTML DOM Parser](https://github.com/sunra/php-simple-html-dom-parser) for data scrapping.
-
-Version 0.1.0
-
-Intial release date on telegram: **20 Oct 2020**
+Version 2.0
 
 ## Join us on telegram [ [@threej_in](https://telegram.me/threej_in) ] to receive the update regarding this bot.
