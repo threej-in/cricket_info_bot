@@ -1,36 +1,38 @@
 <?php
 
 /**
- * Telegram bot script for fetching cricket data from cricbuzz website.
+ * Telegram bot script for fetching cricket data from cricapi.com website.
  * 
  * @link http://threej.in
  * @author threej [ Jitendra Pal ]
  * 
  * licence under GNU General Public License v3.0
  * licence @link https://github.com/threej-in/cricket_info_bot/blob/main/LICENSE
- * @version 0.1.0
+ * @version 0.2.0
  */
 
-require_once 'includes/msg_processor.php';
+  //define('ROOT', 'rf/telegram/bots/cricbuzz_bot/');
+  define('ROOT', 'rf/tg_bots/cricbuzz_bot/');
+  
+  //load telegram bot module [ JARVIS ]
+  require $threej->req(ROOT."class/functions.php");
 
-//set webhook using query parameter
-if(isset($_GET)){
+  //get update from telegram
+  $update = file_get_contents("php://input");
 
-  if(isset($_GET['AAE8QCd9apUDBu5QO_q3FPEmBxBEhlfPv-o_swbhkurl'])){
-
-    $parameter = ['method'=>'setwebhook','url' => $_GET['AAE8QCd9apUDBu5QO_q3FPEmBxBEhlfPv-o_swbhkurl']];
-    $result = $COM->curl_handler($parameter, 1);
-    echo $result;
-
-  }else{
-    echo "<h2>404 World is missing</h3><br>"; //show error to unknown visitors 
+  //log error if wrong update received
+  if(empty($update) || !is_string($update)){
+    return $jarvis->e(-1, "Wrong update received");
   }
-}else{
-  echo "<h2>404 World is missing</h3><br>"; //show error to unknown visitors 
-}
 
-//get update and send for processing
-$message = file_get_contents("php://input");
-new message($message);
-
-mysqli_close($CONN);
+  //send update for processing
+  $update_arr = $threej->json__decode($update, 1);
+  if(!$update_arr){
+    return $jarvis->e(-1, $threej->to_string($update_arr));
+  }else{
+    $src = $jarvis->get_source($update_arr);
+    require $threej->req(ROOT.'msg_processor.php');
+  }
+  http_response_code(200);
+  return ;
+?>
