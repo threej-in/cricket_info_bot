@@ -16,3 +16,4 @@ Language used PHP and Mysqli
 Version 2.0
 
 ## Join us on telegram [ [@threej_in](https://telegram.me/threej_in) ] to receive the update regarding this bot.
+A project by [threej.in](https://threej.in)
